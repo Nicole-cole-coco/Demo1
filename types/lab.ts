@@ -49,9 +49,18 @@ export type ScenarioStageVariant = {
 
 export type LabScenarioId =
   | "intp-everyday-connection"
+  | "infj-chat-rhythm"
+  | "entp-interest-difference"
   | "isfj-roommate-friction"
+  | "enfp-slow-replies"
+  | "istj-changed-plan"
+  | "isfj-forgotten-moment"
   | "enfp-future-values-journey"
+  | "entj-career-crossroads"
+  | "esfp-spending-values"
+  | "infp-future-city"
   | "infj-trust-journey"
+  | "istp-long-cold-war"
   | "enfp-love-freedom"
   | "intj-emotional-needs"
   | "intp-emotional-expression"

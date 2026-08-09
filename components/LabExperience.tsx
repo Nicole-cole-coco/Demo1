@@ -29,7 +29,27 @@ const scenarioTone: Record<LabScenarioId, { border: string; badge: string }> = {
     border: "border-t-violet-400",
     badge: "border-violet-300/25 bg-violet-400/10 text-violet-200"
   },
+  "infj-chat-rhythm": {
+    border: "border-t-emerald-400",
+    badge: "border-emerald-300/25 bg-emerald-400/10 text-emerald-200"
+  },
+  "entp-interest-difference": {
+    border: "border-t-fuchsia-400",
+    badge: "border-fuchsia-300/25 bg-fuchsia-400/10 text-fuchsia-200"
+  },
   "isfj-roommate-friction": {
+    border: "border-t-cyan-400",
+    badge: "border-cyan-300/25 bg-cyan-400/10 text-cyan-200"
+  },
+  "enfp-slow-replies": {
+    border: "border-t-amber-400",
+    badge: "border-amber-300/25 bg-amber-400/10 text-amber-200"
+  },
+  "istj-changed-plan": {
+    border: "border-t-blue-400",
+    badge: "border-blue-300/25 bg-blue-400/10 text-blue-200"
+  },
+  "isfj-forgotten-moment": {
     border: "border-t-cyan-400",
     badge: "border-cyan-300/25 bg-cyan-400/10 text-cyan-200"
   },
@@ -37,9 +57,25 @@ const scenarioTone: Record<LabScenarioId, { border: string; badge: string }> = {
     border: "border-t-amber-400",
     badge: "border-amber-300/25 bg-amber-400/10 text-amber-200"
   },
+  "entj-career-crossroads": {
+    border: "border-t-sky-400",
+    badge: "border-sky-300/25 bg-sky-400/10 text-sky-200"
+  },
+  "esfp-spending-values": {
+    border: "border-t-yellow-400",
+    badge: "border-yellow-300/25 bg-yellow-400/10 text-yellow-200"
+  },
+  "infp-future-city": {
+    border: "border-t-rose-400",
+    badge: "border-rose-300/25 bg-rose-400/10 text-rose-200"
+  },
   "infj-trust-journey": {
     border: "border-t-emerald-400",
     badge: "border-emerald-300/25 bg-emerald-400/10 text-emerald-200"
+  },
+  "istp-long-cold-war": {
+    border: "border-t-slate-400",
+    badge: "border-slate-300/25 bg-slate-400/10 text-slate-200"
   },
   "enfp-love-freedom": {
     border: "border-t-emerald-500",
@@ -125,9 +161,18 @@ const scenarioTone: Record<LabScenarioId, { border: string; badge: string }> = {
 
 const scenarioBackdrop: Record<LabScenarioId, string> = {
   "intp-everyday-connection": "/scenes/rainy-cafe-v1.webp",
+  "infj-chat-rhythm": "/scenes/rainy-cafe-v1.webp",
+  "entp-interest-difference": "/scenes/rainy-cafe-v1.webp",
   "isfj-roommate-friction": "/scenes/botanical-room-v1.webp",
+  "enfp-slow-replies": "/scenes/night-city-v1.webp",
+  "istj-changed-plan": "/scenes/future-office-v1.webp",
+  "isfj-forgotten-moment": "/scenes/botanical-room-v1.webp",
   "enfp-future-values-journey": "/scenes/night-city-v1.webp",
+  "entj-career-crossroads": "/scenes/future-office-v1.webp",
+  "esfp-spending-values": "/scenes/night-city-v1.webp",
+  "infp-future-city": "/scenes/night-city-v1.webp",
   "infj-trust-journey": "/scenes/night-city-v1.webp",
+  "istp-long-cold-war": "/scenes/night-city-v1.webp",
   "enfp-love-freedom": "/scenes/night-city-v1.webp",
   "intj-emotional-needs": "/scenes/night-city-v1.webp",
   "intp-emotional-expression": "/scenes/rainy-cafe-v1.webp",

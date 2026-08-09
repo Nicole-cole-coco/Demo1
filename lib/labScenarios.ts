@@ -1,4 +1,5 @@
 import type { MbtiType } from "@/types/avatar";
+import { baseRelationshipScenarios } from "@/lib/baseRelationshipScenarios";
 import { loveCrisisScenario } from "@/lib/loveCrisisScenario";
 import { chapterScenarios } from "@/lib/chapterScenarios";
 import { personalityScenarios } from "@/lib/personalityScenarios";
@@ -854,10 +855,30 @@ const legacyLabScenarios = [
 
 export const labScenarios: readonly ScenarioDefinition[] = [
   ...relationshipJourneyScenarios,
+  ...baseRelationshipScenarios,
   loveCrisisScenario,
   ...chapterScenarios,
   ...personalityScenarios
 ];
+
+const scenarioIds = new Set<LabScenarioId>();
+
+for (const scenario of labScenarios) {
+  if (scenarioIds.has(scenario.id)) {
+    throw new Error(`Duplicate lab scenario id: ${scenario.id}`);
+  }
+  if (scenario.stages.length < 20) {
+    throw new Error(`Lab scenario ${scenario.id} must contain at least 20 stages.`);
+  }
+  scenarioIds.add(scenario.id);
+}
+
+for (const difficulty of [1, 2, 3, 4] as const) {
+  const scenarioCount = labScenarios.filter((scenario) => scenario.difficulty === difficulty).length;
+  if (scenarioCount < 3) {
+    throw new Error(`Lab difficulty ${difficulty} requires at least 3 scenarios; received ${scenarioCount}.`);
+  }
+}
 
 export const labScenarioMap = Object.fromEntries(
   labScenarios.map((scenario) => [scenario.id, scenario])
