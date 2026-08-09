@@ -1,7 +1,8 @@
-import type { MbtiType } from "@/types/avatar";
+import { mbtiTypes, type MbtiType } from "@/types/avatar";
 import { baseRelationshipScenarios } from "@/lib/baseRelationshipScenarios";
 import { loveCrisisScenario } from "@/lib/loveCrisisScenario";
 import { chapterScenarios } from "@/lib/chapterScenarios";
+import { buildMissingPersonaMatrixScenarios } from "@/lib/personaScenarioMatrix";
 import { personalityScenarios } from "@/lib/personalityScenarios";
 import { relationshipJourneyScenarios } from "@/lib/relationshipJourneyScenarios";
 import type {
@@ -853,12 +854,19 @@ const legacyLabScenarios = [
   }
 ] as const;
 
-export const labScenarios: readonly ScenarioDefinition[] = [
+const establishedLabScenarios: readonly ScenarioDefinition[] = [
   ...relationshipJourneyScenarios,
   ...baseRelationshipScenarios,
   loveCrisisScenario,
   ...chapterScenarios,
   ...personalityScenarios
+];
+
+const personaMatrixScenarios = buildMissingPersonaMatrixScenarios(establishedLabScenarios);
+
+export const labScenarios: readonly ScenarioDefinition[] = [
+  ...establishedLabScenarios,
+  ...personaMatrixScenarios
 ];
 
 const scenarioIds = new Set<LabScenarioId>();
@@ -880,10 +888,23 @@ for (const difficulty of [1, 2, 3, 4] as const) {
   }
 }
 
+for (const mbti of mbtiTypes) {
+  for (const difficulty of [1, 2, 3, 4] as const) {
+    const hasScenario = labScenarios.some((scenario) =>
+      scenario.difficulty === difficulty && scenario.targetMbtis.includes(mbti)
+    );
+    if (!hasScenario) {
+      throw new Error(`Lab matrix is missing ${mbti} difficulty ${difficulty}.`);
+    }
+  }
+}
+
 export const labScenarioMap = Object.fromEntries(
   labScenarios.map((scenario) => [scenario.id, scenario])
-) as Record<LabScenarioId, ScenarioDefinition>;
+) as Partial<Record<LabScenarioId, ScenarioDefinition>>;
 
 export function getLabScenario(id: LabScenarioId) {
-  return labScenarioMap[id];
+  const scenario = labScenarioMap[id];
+  if (!scenario) throw new Error(`Unknown lab scenario: ${id}`);
+  return scenario;
 }

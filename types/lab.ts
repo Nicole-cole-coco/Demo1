@@ -26,6 +26,8 @@ export type RelationshipMetric = (typeof relationshipMetricIds)[number];
 export type RelationshipState = Record<RelationshipMetric, number>;
 export type RelationshipStateDelta = Partial<Record<RelationshipMetric, number>>;
 export type ChallengeLevel = 1 | 2 | 3 | 4;
+export type PersonaMatrixLevelSlug = "conversation" | "friction" | "values" | "crisis";
+export type PersonaMatrixScenarioId = `${Lowercase<MbtiType>}-matrix-${PersonaMatrixLevelSlug}`;
 
 export type RelationshipSnapshot = {
   stageId: string;
@@ -48,6 +50,7 @@ export type ScenarioStageVariant = {
 };
 
 export type LabScenarioId =
+  | PersonaMatrixScenarioId
   | "intp-everyday-connection"
   | "infj-chat-rhythm"
   | "entp-interest-difference"

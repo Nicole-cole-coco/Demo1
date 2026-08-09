@@ -21,10 +21,13 @@ import type {
   ChallengeLevel,
   LabScenarioId,
   RelationshipMetric,
+  ScenarioDefinition,
   ScenarioOption
 } from "@/types/lab";
 
-const scenarioTone: Record<LabScenarioId, { border: string; badge: string }> = {
+type ScenarioTone = { border: string; badge: string };
+
+const scenarioTone: Partial<Record<LabScenarioId, ScenarioTone>> = {
   "intp-everyday-connection": {
     border: "border-t-violet-400",
     badge: "border-violet-300/25 bg-violet-400/10 text-violet-200"
@@ -159,7 +162,7 @@ const scenarioTone: Record<LabScenarioId, { border: string; badge: string }> = {
   }
 };
 
-const scenarioBackdrop: Record<LabScenarioId, string> = {
+const scenarioBackdrop: Partial<Record<LabScenarioId, string>> = {
   "intp-everyday-connection": "/scenes/rainy-cafe-v1.webp",
   "infj-chat-rhythm": "/scenes/rainy-cafe-v1.webp",
   "entp-interest-difference": "/scenes/rainy-cafe-v1.webp",
@@ -194,6 +197,50 @@ const scenarioBackdrop: Record<LabScenarioId, string> = {
   "isfj-family-conflict": "/scenes/botanical-room-v1.webp",
   "estj-team-failure": "/scenes/future-office-v1.webp"
 };
+
+const groupScenarioTone: Record<
+  ReturnType<typeof getCompanionCatalogProfile>["group"],
+  ScenarioTone
+> = {
+  analyst: {
+    border: "border-t-violet-400",
+    badge: "border-violet-300/25 bg-violet-400/10 text-violet-200"
+  },
+  diplomat: {
+    border: "border-t-emerald-400",
+    badge: "border-emerald-300/25 bg-emerald-400/10 text-emerald-200"
+  },
+  sentinel: {
+    border: "border-t-sky-400",
+    badge: "border-sky-300/25 bg-sky-400/10 text-sky-200"
+  },
+  explorer: {
+    border: "border-t-amber-400",
+    badge: "border-amber-300/25 bg-amber-400/10 text-amber-200"
+  }
+};
+
+const sceneBackdrop: Record<ScenarioDefinition["sceneType"], string> = {
+  love: "/scenes/night-city-v1.webp",
+  friendship: "/scenes/rainy-cafe-v1.webp",
+  boundary: "/scenes/botanical-room-v1.webp",
+  workplace: "/scenes/future-office-v1.webp",
+  value: "/scenes/night-city-v1.webp",
+  dating: "/scenes/rainy-cafe-v1.webp",
+  family: "/scenes/botanical-room-v1.webp",
+  teamwork: "/scenes/future-office-v1.webp"
+};
+
+function getScenarioTone(scenario: ScenarioDefinition): ScenarioTone {
+  return (
+    scenarioTone[scenario.id] ??
+    groupScenarioTone[getCompanionCatalogProfile(scenario.targetMbti).group]
+  );
+}
+
+function getScenarioBackdrop(scenario: ScenarioDefinition): string {
+  return scenarioBackdrop[scenario.id] ?? sceneBackdrop[scenario.sceneType];
+}
 
 const themeClass = {
   analyst: "persona-theme-analyst",
@@ -370,7 +417,7 @@ export default function LabExperience() {
       <main className={`v3-page persona-universe persona-atmosphere relative ${themeClass[profile.group]}`}>
         <div className="absolute inset-0 z-0">
           <Image
-            src={scenarioBackdrop[scenario.id]}
+            src={getScenarioBackdrop(scenario)}
             alt=""
             fill
             priority
@@ -646,7 +693,7 @@ export default function LabExperience() {
 
         <div className="mt-7 grid gap-4 md:grid-cols-2">
           {filteredScenarios.map((scenario) => {
-            const tone = scenarioTone[scenario.id];
+            const tone = getScenarioTone(scenario);
             const flagship = scenario.stages.length >= 20;
             return (
               <article
@@ -655,7 +702,7 @@ export default function LabExperience() {
               >
                 <div className={`relative overflow-hidden bg-white/5 ${flagship ? "aspect-[4/3] sm:aspect-[16/7]" : "aspect-[4/3] sm:aspect-[16/8]"}`}>
                   <Image
-                    src={scenarioBackdrop[scenario.id]}
+                    src={getScenarioBackdrop(scenario)}
                     alt={`${scenario.title}场景`}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"

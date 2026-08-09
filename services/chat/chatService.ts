@@ -27,7 +27,9 @@ export const companionChatService = {
         id: "daily",
         title: "日常人格交流"
       },
-      responseInstructions: [personaGuide]
+      responseInstructions: [personaGuide],
+      temperature: 0.82,
+      maxTokens: 700
     });
 
     return {

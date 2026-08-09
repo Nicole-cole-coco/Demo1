@@ -33,6 +33,7 @@ export type ChapterScenarioSeed = {
   difficulty?: ScenarioDefinition["difficulty"];
   difficultyLabel?: string;
   journeyStructure?: boolean;
+  chapterTitles?: readonly string[];
   nodes: readonly NodeSeed[];
   endings: readonly ScenarioEndingDefinition[];
 };
@@ -190,18 +191,28 @@ function createStageVariants(node: NodeSeed, round: number) {
 }
 
 export function buildScenario(seed: ChapterScenarioSeed): ScenarioDefinition {
+  const resolvedChapterTitles = seed.chapterTitles ?? (
+    seed.journeyStructure ? journeyChapterTitles : chapterTitles
+  );
+  if (resolvedChapterTitles.length === 0) {
+    throw new Error(`Scenario ${seed.id} must define at least one chapter.`);
+  }
+
   const stages: ScenarioStage[] = seed.nodes.map((node, index) => {
     const round = index + 1;
-    const chapter = seed.journeyStructure
-      ? Math.min(5, Math.ceil(round / 5))
-      : Math.min(7, Math.ceil(round / 3));
+    const chapter = seed.chapterTitles
+      ? Math.min(
+        resolvedChapterTitles.length,
+        Math.ceil((round * resolvedChapterTitles.length) / seed.nodes.length)
+      )
+      : seed.journeyStructure
+        ? Math.min(5, Math.ceil(round / 5))
+        : Math.min(7, Math.ceil(round / 3));
     return {
       id: `${seed.prefix}-${round}`,
       round,
       chapter,
-      chapterTitle: seed.journeyStructure
-        ? journeyChapterTitles[chapter - 1]
-        : chapterTitles[chapter - 1],
+      chapterTitle: resolvedChapterTitles[chapter - 1],
       beat: node.beat,
       story: node.story,
       targetLine: node.line,

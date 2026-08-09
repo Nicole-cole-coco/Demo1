@@ -22,8 +22,14 @@ const complete = (config: ProviderConfig) =>
 function deepSeekConfig(): ProviderConfig {
   return {
     apiKey: process.env.DEEPSEEK_API_KEY || process.env.LLM_API_KEY || "",
-    baseUrl: process.env.DEEPSEEK_BASE_URL || process.env.LLM_BASE_URL || "",
-    model: process.env.DEEPSEEK_MODEL || process.env.LLM_MODEL || ""
+    baseUrl:
+      process.env.DEEPSEEK_BASE_URL ||
+      process.env.LLM_BASE_URL ||
+      "https://api.deepseek.com",
+    model:
+      process.env.DEEPSEEK_MODEL ||
+      process.env.LLM_MODEL ||
+      "deepseek-v4-flash"
   };
 }
 
