@@ -9,14 +9,6 @@ const inferEmotion = (input: ChatServiceInput): ChatResponse["emotion"] => {
   return "calm";
 };
 
-const followUpSuggestions = (input: ChatServiceInput) => {
-  if (input.scenario === "emotion") return ["我想继续说说事情经过", "先陪我待一会儿"];
-  if (input.scenario === "study") return ["聊聊我卡住的地方", "一起找一个能开始的小动作"];
-  if (input.scenario === "career") return ["说说我最担心失去什么", "一起看看两个现实选择"];
-  if (input.scenario === "interest") return ["听我继续分享", "说说你的真实看法"];
-  return ["继续聊刚才的事", "换个轻松的话题"];
-};
-
 const fallbackResponse = (input: ChatServiceInput): ChatResponse => ({
   reply: "刚才连接没有成功，但这段话没有丢失。等连接恢复后，我们可以从这里继续。",
   mode: "demo",
@@ -42,6 +34,7 @@ export const ChatService = {
           persona: input.mbti,
           mbti: input.mbti,
           gender: input.gender,
+          scenario: input.scenario,
           userMessage: input.userMessage,
           conversationHistory: input.conversationHistory
         })
@@ -57,7 +50,7 @@ export const ChatService = {
         emotion: inferEmotion(input),
         model: "persona-conversation",
         usage: {},
-        suggestions: followUpSuggestions(input),
+        suggestions: [],
         metadata: {
           mbti: input.mbti,
           provider: "companion-chat",

@@ -20,7 +20,6 @@ export default function ChatWindow({ onSwitchCompanion }: ChatWindowProps) {
   const [pendingMbti, setPendingMbti] = useState<MbtiType | null>(null);
   const [responseMode, setResponseMode] = useState<ChatResponseMode | null>(null);
   const [companionEmotion, setCompanionEmotion] = useState<ChatEmotion>("calm");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const selectedCompanion = useExplorationStore((state) => state.selectedCompanion);
   const userMbti = useExplorationStore((state) => state.userProfile.selfMbti);
@@ -40,7 +39,6 @@ export default function ChatWindow({ onSwitchCompanion }: ChatWindowProps) {
   useEffect(() => {
     setResponseMode(null);
     setCompanionEmotion("calm");
-    setSuggestions([]);
     setInput("");
   }, [selectedCompanion.mbti]);
 
@@ -50,7 +48,7 @@ export default function ChatWindow({ onSwitchCompanion }: ChatWindowProps) {
 
     const requestCompanion = selectedCompanion;
     const requestMbti = requestCompanion.mbti;
-    const history = messages.slice(-12).map((message) => ({
+    const history = messages.slice(-20).map((message) => ({
       role: message.role,
       content: message.content
     }));
@@ -75,7 +73,6 @@ export default function ChatWindow({ onSwitchCompanion }: ChatWindowProps) {
       if (useExplorationStore.getState().selectedCompanion.mbti === requestMbti) {
         setResponseMode(data.mode);
         setCompanionEmotion(data.emotion);
-        setSuggestions(data.suggestions);
       }
     } catch {
       addAssistantMessage(requestMbti, "刚才连接没有成功，但你的消息已经保存在本地。稍后再试一次，我们可以从这里继续。");
@@ -205,20 +202,6 @@ export default function ChatWindow({ onSwitchCompanion }: ChatWindowProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="app-safe-bottom border-t border-white/10 bg-[rgba(10,12,24,0.82)] p-3 backdrop-blur-xl sm:p-4">
-        {suggestions.length > 0 && !activePending && (
-          <div className="mobile-snap-row mb-2 flex snap-x gap-2 overflow-x-auto pb-1" aria-label="继续聊天建议">
-            {suggestions.map((suggestion) => (
-              <button
-                key={suggestion}
-                type="button"
-                onClick={() => setInput(suggestion)}
-                className="min-h-9 shrink-0 snap-start rounded border border-white/10 bg-white/5 px-3 text-xs font-semibold text-[var(--ink-soft)] hover:border-[var(--persona-accent)] hover:text-white"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        )}
         <div className="flex items-end gap-2 sm:gap-3">
           <textarea
             value={input}

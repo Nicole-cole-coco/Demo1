@@ -1,5 +1,5 @@
 import type { MbtiType } from "@/types/avatar";
-import type { CompanionGender } from "@/types/companion";
+import type { ChatScenarioId, CompanionGender } from "@/types/companion";
 
 export type CompanionConversationMessage = {
   role: "user" | "assistant";
@@ -12,6 +12,7 @@ export type CompanionChatRequest = {
   personaId?: string;
   mbti: MbtiType;
   gender?: CompanionGender;
+  scenario?: ChatScenarioId | null;
   userMessage: string;
   conversationHistory: readonly CompanionConversationMessage[];
 };

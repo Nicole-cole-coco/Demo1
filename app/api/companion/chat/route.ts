@@ -1,10 +1,11 @@
 import { companionChatService } from "@/services/chat/chatService";
+import { getChatScenario } from "@/lib/chatScenarios";
 import type {
   CompanionChatRequest,
   CompanionConversationMessage
 } from "@/services/chat/types";
 import { mbtiTypes, type MbtiType } from "@/types/avatar";
-import type { CompanionGender } from "@/types/companion";
+import type { ChatScenarioId, CompanionGender } from "@/types/companion";
 
 export const runtime = "nodejs";
 
@@ -47,10 +48,14 @@ export async function POST(request: Request) {
       : typeof raw.personaId === "string" && raw.personaId.trim()
         ? raw.personaId.trim().slice(0, 80)
         : mbti;
+    const scenario = typeof raw.scenario === "string"
+      ? getChatScenario(raw.scenario as ChatScenarioId)?.id ?? null
+      : null;
     const result = await companionChatService.sendMessage({
       persona,
       mbti,
       gender,
+      scenario,
       userMessage,
       conversationHistory: sanitizeHistory(raw.conversationHistory)
     });

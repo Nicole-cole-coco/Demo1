@@ -1,6 +1,10 @@
 import { getPersonaDefinition } from "@/lib/personas";
+import { getChatScenario } from "@/lib/chatScenarios";
 import { chatService as modelChatService } from "@/services/ai/chatService";
-import { buildCompanionPersonaPrompt } from "@/services/chat/personaPrompt";
+import {
+  buildCompanionModePrompt,
+  buildCompanionPersonaPrompt
+} from "@/services/chat/personaPrompt";
 import type {
   CompanionChatRequest,
   CompanionChatResponse
@@ -15,6 +19,8 @@ export const companionChatService = {
       speakingStyle: persona.speakingStyle.tone,
       relationshipStyle: persona.relationshipNeeds
     });
+    const scenario = getChatScenario(input.scenario) ?? getChatScenario("daily");
+    const scenarioId = scenario?.id ?? "daily";
 
     const result = await modelChatService.sendMessage({
       userMessage: input.userMessage,
@@ -24,10 +30,11 @@ export const companionChatService = {
       conversationHistory: input.conversationHistory,
       scenarioContext: {
         kind: "companion",
-        id: "daily",
-        title: "日常人格交流"
+        id: scenarioId,
+        title: scenario?.label ?? "日常人格交流",
+        description: scenario?.prompt
       },
-      responseInstructions: [personaGuide],
+      responseInstructions: [personaGuide, buildCompanionModePrompt(scenarioId)],
       temperature: 0.82,
       maxTokens: 700
     });
